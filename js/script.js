@@ -3,14 +3,99 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initStickyHeader();
   initParallaxHero();
   initPhraseRotator();
   initScrollAnimations();
+  initCardGlintSweep();
 });
+
+// Sticky Frosted Glass Header
+function initStickyHeader() {
+  const header = document.getElementById('siteHeader');
+  if (!header) return;
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
+}
 
 // Smooth Scroll to Tool
 function scrollToTool() {
   document.getElementById('tool').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Modal System
+const modalData = {
+  howItWorks: {
+    title: 'How ClearFin Works',
+    body: `<p>ClearFin matches your actual spending habits against 107+ Canadian credit cards to find your perfect rewards match.</p>
+    <ul>
+      <li>Select your top spending categories</li>
+      <li>Enter your estimated monthly amounts</li>
+      <li>Get your personalized card recommendation instantly</li>
+      <li>See exactly how much more you could earn per year</li>
+    </ul>
+    <p>No sign-up required. No data stored. Results in 60 seconds.</p>`
+  },
+  aboutUs: {
+    title: 'About ClearFin',
+    body: `<p>We're a Canadian fintech team on a mission to end rewards confusion. Most Canadians lose $500+ in potential cashback every year — simply because they're using the wrong card.</p>
+    <ul>
+      <li>100% independent — we don't work for any bank</li>
+      <li>Built by Canadians, for the Canadian market</li>
+      <li>Zero data collection — your privacy is absolute</li>
+      <li>Free forever — no hidden fees, no catches</li>
+    </ul>`
+  },
+  consultation: {
+    title: 'Book a Free Strategy Session',
+    body: `<p>Get a personalized 30-minute session with a ClearFin rewards strategist. We'll audit your wallet, optimize your card stack, and build a custom debt payoff plan.</p>
+    <ul>
+      <li>Full credit card portfolio audit</li>
+      <li>Personalized rewards maximization strategy</li>
+      <li>Credit score improvement roadmap</li>
+      <li>Debt consolidation timeline</li>
+    </ul>
+    <p style="color: var(--accent-gold); font-weight: 500; margin-top: 1rem;">No sales pitch. No obligation. Just clarity.</p>`
+  }
+};
+
+function openModal(key) {
+  const overlay = document.getElementById('modalOverlay');
+  const content = document.getElementById('modalContent');
+  const data = modalData[key];
+  if (!data) return;
+  content.innerHTML = `<h3>${data.title}</h3>${data.body}`;
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const overlay = document.getElementById('modalOverlay');
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Periodic Glint Sweep across cards
+function initCardGlintSweep() {
+  const glints = document.querySelectorAll('.card-glint');
+  if (!glints.length) return;
+  
+  function sweepGlints() {
+    glints.forEach((glint, i) => {
+      setTimeout(() => {
+        glint.style.transition = 'left 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        glint.style.left = '100%';
+        setTimeout(() => {
+          glint.style.transition = 'none';
+          glint.style.left = '-100%';
+        }, 1300);
+      }, i * 400);
+    });
+  }
+  
+  sweepGlints();
+  setInterval(sweepGlints, 5000);
 }
 
 // 1. 3D Parallax Hover for Hero Credit Cards
@@ -18,26 +103,26 @@ function initParallaxHero() {
   const heroSection = document.getElementById('hero');
   const cardStack = document.getElementById('cardStack');
   const cards = document.querySelectorAll('.credit-card');
-  
+
   if (!heroSection || !cardStack) return;
 
   heroSection.addEventListener('mousemove', (e) => {
     // Get mouse position relative to center of screen
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
-    
+
     // Normalize coordinates from -1 to 1
     const mouseX = (e.clientX / windowWidth) * 2 - 1;
     const mouseY = (e.clientY / windowHeight) * 2 - 1;
-    
+
     // Maximum rotation limits increased for deeper 3D feel
     const limitX = 20; // degrees tilt up/down
     const limitY = 30; // degrees tilt left/right
-    
+
     // Calculate new target angles
     const targetRotateX = mouseY * -limitX;
     const targetRotateY = mouseX * limitY;
-    
+
     // Smooth transition for stack
     cardStack.style.transform = `rotateX(${targetRotateX}deg) rotateY(${targetRotateY}deg)`;
 
@@ -63,20 +148,20 @@ function initPhraseRotator() {
   if (phrases.length === 0) return;
 
   let currentIndex = 0;
-  
+
   setInterval(() => {
     // Remove active class from current and add "prev" for exit animation
     phrases[currentIndex].classList.remove('active');
     phrases[currentIndex].classList.add('prev');
-    
+
     // Calculate next index
     const prevIndex = currentIndex;
     currentIndex = (currentIndex + 1) % phrases.length;
-    
+
     // Prepare next item by removing "prev" and adding "active"
     phrases[currentIndex].classList.remove('prev');
     phrases[currentIndex].classList.add('active');
-    
+
     // Clean up older classes shortly after transition completes
     setTimeout(() => {
       phrases[prevIndex].classList.remove('prev');
@@ -91,7 +176,7 @@ function initScrollAnimations() {
     console.warn('GSAP not loaded. Premium animations skipped.');
     return;
   }
-  
+
   gsap.registerPlugin(ScrollTrigger);
 
   // A. Fluid Hero Cinematic Sequence (Unpinned)
@@ -105,19 +190,19 @@ function initScrollAnimations() {
   });
 
   // Camera pushes through the text
-  heroTl.to(".hero-content", { 
-    scale: 1.2, 
+  heroTl.to(".hero-content", {
+    scale: 1.2,
     y: -50,
-    opacity: 0, 
+    opacity: 0,
     filter: "blur(10px)",
     duration: 1
   }, 0);
 
   // Cards aggressively blast out into 3D space, separating and scaling past the viewport
   heroTl.to(".card-1", { z: 500, x: -300, y: -200, rotationZ: -25, scale: 1.5, opacity: 0, filter: "blur(5px)", duration: 1.5 }, 0.2)
-        .to(".card-2", { z: 400, x: 250, y: -100, rotationZ: 40, scale: 1.5, opacity: 0, filter: "blur(5px)", duration: 1.5 }, 0.2)
-        .to(".card-3", { z: 200, x: 50, y: 300, rotationZ: -10, scale: 2, opacity: 0, filter: "blur(5px)", duration: 1.5 }, 0.2)
-        .to(".hero-bg-glow", { scale: 1.5, opacity: 0, duration: 1.5 }, 0.2);
+    .to(".card-2", { z: 400, x: 250, y: -100, rotationZ: 40, scale: 1.5, opacity: 0, filter: "blur(5px)", duration: 1.5 }, 0.2)
+    .to(".card-3", { z: 200, x: 50, y: 300, rotationZ: -10, scale: 2, opacity: 0, filter: "blur(5px)", duration: 1.5 }, 0.2)
+    .to(".hero-bg-glow", { scale: 1.5, opacity: 0, duration: 1.5 }, 0.2);
 
 
   // B. Marquee Velocity Tracker (Skew Effect)
@@ -129,7 +214,7 @@ function initScrollAnimations() {
   ScrollTrigger.create({
     onUpdate: (self) => {
       let skew = clamp(self.getVelocity() / -150);
-      
+
       // Map to the proxy so we can animate it back to exactly 0 smoothly with a spring-like ease
       if (Math.abs(skew) > Math.abs(proxy.skew)) {
         proxy.skew = skew;
@@ -169,7 +254,7 @@ function initScrollAnimations() {
     onEnter: () => gsap.to(".logo-cf-block", { background: "linear-gradient(180deg, #3B82F6 0%, #2563EB 100%)", boxShadow: "0 4px 20px rgba(37, 99, 235, 0.4)", duration: 0.8 }),
     onLeaveBack: () => gsap.to(".logo-cf-block", { background: "linear-gradient(180deg, #FFCA28 0%, #F59E0B 100%)", boxShadow: "0 4px 20px rgba(245, 158, 11, 0.3)", duration: 0.8 })
   });
-  
+
   ScrollTrigger.create({
     trigger: ".footer-cta",
     start: "top 80%",
@@ -179,9 +264,9 @@ function initScrollAnimations() {
 
 
   // E. Base Premium Section Reveals for Text
-  gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
+  gsap.utils.toArray('.gs-reveal').forEach(function (elem) {
     if (elem.classList.contains('service-card') || elem.classList.contains('tool-container')) return;
-    
+
     gsap.from(elem, {
       scrollTrigger: {
         trigger: elem,
@@ -205,7 +290,7 @@ function initScrollAnimations() {
       scrub: 1.5,
     },
     y: 150,
-    rotationZ: (i) => i === 0 ? -10 : i === 2 ? 10 : 0, 
+    rotationZ: (i) => i === 0 ? -10 : i === 2 ? 10 : 0,
     opacity: 0,
     stagger: 0.1
   });
