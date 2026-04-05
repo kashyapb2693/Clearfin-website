@@ -1,0 +1,136 @@
+/* 
+  Animations for ClearFin Landing Page
+  Contains physics-based transitions, shimmers, sweeps, and layout loops.
+*/
+
+/* 1. Card Glint Sweep */
+@keyframes sweep {
+  0% {
+    left: -100%;
+  }
+  20% {
+    left: 200%;
+  }
+  100% {
+    left: 200%;
+  }
+}
+
+.hero-visual .credit-card .card-glint {
+  animation: sweep 4s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.hero-visual .card-1 .card-glint { animation-delay: 0s; }
+.hero-visual .card-2 .card-glint { animation-delay: 0.5s; }
+.hero-visual .card-3 .card-glint { animation-delay: 1s; }
+
+/* 2. Marquee Auto-Scroll */
+@keyframes scrollMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Translate left by 50% so we can loop the content seamlessly (content duplicated in HTML) */
+    transform: translateX(-50%);
+  }
+}
+
+/* 3. Subtle Floating (Fallback if js parallax is off) */
+@keyframes hoverFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 4. Pulse / Glow Effect for buttons */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
+}
+.btn-primary {
+  animation: pulseGlow 3s infinite;
+}
+
+/* Gold Button Shimmer */
+@keyframes goldShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+.btn-secondary {
+  /* Using pseudo-element or background gradient to shimmer */
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0), rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0));
+  background-size: 200% auto;
+  transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+  animation: goldShimmer 2s infinite linear;
+}
+
+/* 5. Fade Slide Up for Form Steps and Viewport Entries */
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Winner Card 'Rise' effect */
+@keyframes popRise {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 20px 50px rgba(245, 158, 11, 0.2);
+  }
+}
+
+.winner-card.animate-pop {
+  animation: popRise 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Trust Badge subtle pulse */
+@keyframes badgePulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+.trust-badge {
+  animation: badgePulse 4s infinite ease-in-out;
+}
+.trust-badge:nth-child(2) { animation-delay: 1.3s; }
+.trust-badge:nth-child(3) { animation-delay: 2.6s; }
+
+/* 3D Stack Base entry */
+@keyframes enterCards {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.hero-visual {
+  animation: enterCards 1s ease-out forwards;
+}
