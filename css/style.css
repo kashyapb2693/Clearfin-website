@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
 :root {
   /* Brand Colors — Premium Palette */
@@ -36,12 +36,11 @@
 }
 
 html {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--bg-deep-navy);
   color: var(--text-main);
   scroll-behavior: smooth;
   overflow-x: hidden;
-  font-feature-settings: 'ss01', 'cv01';
 }
 
 body {
@@ -64,11 +63,11 @@ h6 {
 }
 
 .hero-title {
-  font-family: 'Syne', 'Inter', sans-serif;
-  font-size: clamp(2rem, 3.5vw, 3.25rem);
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: clamp(2.2rem, 3.8vw, 3.5rem);
   font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.03em;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
   margin-bottom: 1rem;
 }
 
@@ -212,9 +211,10 @@ button {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   cursor: pointer;
 }
 
